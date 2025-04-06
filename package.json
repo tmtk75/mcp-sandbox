@@ -2,6 +2,7 @@
   "name": "mcp-sandbox",
   "private": true,
   "scripts": {
+    "build": "pnpm -r build",
     "clean": "pnpm -r clean"
   },
   "pnpm": {
@@ -10,5 +11,8 @@
         "react": "18"
       }
     }
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4"
   }
-} 
+}

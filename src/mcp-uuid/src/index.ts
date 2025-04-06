@@ -4,35 +4,43 @@ import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
 const server = new McpServer({
-	name: "uuid-service",
-	version: "1.0.0",
-	description: "A MCP service for generating UUIDs",
-	documentation: "https://github.com/your-repo/mcp-uuid"
+  name: "uuid-service",
+  version: "1.0.0",
+  description: "A MCP service for generating UUIDs",
+  documentation: "https://github.com/your-repo/mcp-uuid",
 });
 
-// UUIDを生成するツールを登録
-server.tool(
-	"generate",
-	{},
-	async () => {
-		const uuid = uuidv4();
-		return {
-			content: [{ type: "text", text: uuid }]
-		};
-	},
-	{
-		description: "Generates a new UUID",
-		examples: [
-			{
-				description: "Generate a new UUID",
-				response: "550e8400-e29b-41d4-a716-446655440000"
-			}
-		]
-	}
-);
+// Register a resource
+server.resource("generate", "mcp://localhost/uuid", async (uri: URL, extra) => ({
+  contents: [
+    {
+      uri: uri.href,
+      text: "UUID pool",
+      mimeType: "text/plain",
+    },
+  ],
+}));
 
-// サーバーを起動
+// Generate a tool
+server.tool("generate", "Generate a new UUID", { prefix: z.string() }, async ({ prefix }) => {
+  const uuid = uuidv4();
+  return {
+    content: [{ type: "text", text: `${prefix}-${uuid}` }],
+  };
+});
+
+// Register a prompt
+server.prompt("generate", "Generate a new UUID", { prefix: z.string() }, ({ prefix }) => ({
+  messages: [
+    {
+      role: "user",
+      content: {
+        type: "text",
+        text: `Please generate a new UUID. Prepend the prefix: ${prefix}.`,
+      },
+    },
+  ],
+}));
+
 const transport = new StdioServerTransport();
 await server.connect(transport);
-
-console.log("UUID MCP service started");
