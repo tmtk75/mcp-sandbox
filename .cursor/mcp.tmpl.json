@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "mcp-uuid": {
+      "command": "pnpm",
+      "args": ["run", "--dir", "src/mcp-uuid", "start"]
+    }
+  }
+}

@@ -4,3 +4,4 @@
 # may have credentials
 /.cursor/mcp.json
 
+node_modules

@@ -1,0 +1,14 @@
+{
+  "name": "mcp-sandbox",
+  "private": true,
+  "scripts": {
+    "clean": "pnpm -r clean"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "react": "18"
+      }
+    }
+  }
+} 
